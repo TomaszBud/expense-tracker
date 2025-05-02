@@ -4,21 +4,34 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Install Dependencies
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
         run: npm install
 
-      - name: Build
+      - name: Build project
         run: npm run build
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
+        env:
+          GIT_USER: github-actions[bot]
+          GIT_EMAIL: github-actions[bot]@users.noreply.github.com
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          npm run deploy
+          npx gh-pages -d build \
+            -u "$GIT_USER <$GIT_EMAIL>" \
+            -r "https://$GH_TOKEN@github.com/TomaszBud/expense-tracker.git"
