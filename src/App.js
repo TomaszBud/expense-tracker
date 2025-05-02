@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycby6i66V7n_ivCwEsQcUEzKzmGCvWoigOeVXfYG3t-_cq1MbFSis-PbKIEMiMJ1UyqdZ/exec';
-const CLIENT_ID = '1006715696745-27c37r1h3ukee0e3opkbio086l8vfgja.googleusercontent.com';
+const CLIENT_ID = '1006715696745-27c37r1h3ukee0e3opkbio086l8vfgja.apps.googleusercontent.com';
 
 function App() {
   const [transactions, setTransactions] = useState([]);
