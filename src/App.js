@@ -1,7 +1,7 @@
 // This will be the main app file for the budget tracker with OAuth.
 // Assumes Google Sign-In is used for authentication.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const API_URL = 'https://script.google.com/macros/s/AKfycby6i66V7n_ivCwEsQcUEzKzmGCvWoigOeVXfYG3t-_cq1MbFSis-PbKIEMiMJ1UyqdZ/exec';
@@ -18,27 +18,30 @@ function App() {
   });
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const handleCredentialResponse = (response) => {
-      const decoded = JSON.parse(atob(response.credential.split('.')[1]));
-      setUser({
-        email: decoded.email,
-        name: decoded.name,
-        token: response.credential,
-      });
-    };
-
-    window.google.accounts.id.initialize({
-      client_id: CLIENT_ID,
-      callback: handleCredentialResponse,
+  const handleCredentialResponse = useCallback((response) => {
+    const decoded = JSON.parse(atob(response.credential.split('.')[1]));
+    setUser({
+      email: decoded.email,
+      name: decoded.name,
+      token: response.credential,
     });
-    window.google.accounts.id.renderButton(
-      document.getElementById("signInDiv"),
-      { theme: "outline", size: "large" }
-    );
   }, []);
 
-  const fetchTransactions = async () => {
+  useEffect(() => {
+    if (window.google && window.google.accounts) {
+      window.google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: handleCredentialResponse,
+      });
+      window.google.accounts.id.renderButton(
+        document.getElementById("signInDiv"),
+        { theme: "outline", size: "large" }
+      );
+    }
+  }, [handleCredentialResponse]);
+
+  const fetchTransactions = useCallback(async () => {
+    if (!user) return;
     try {
       const response = await axios.get(API_URL, {
         headers: { Authorization: `Bearer ${user.token}` },
@@ -47,11 +50,11 @@ function App() {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
-    if (user) fetchTransactions();
-  }, [user]);
+    fetchTransactions();
+  }, [fetchTransactions]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
