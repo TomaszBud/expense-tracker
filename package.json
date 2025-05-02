@@ -13,6 +13,7 @@
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
+  "homepage": "https://TomaszBud.github.io/expense-tracker",
   "scripts": {
     "predeploy": "npm run build",
     "start": "react-scripts start",
