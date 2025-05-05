@@ -85,55 +85,103 @@ function App() {
   const summary = calculateSummary();
 
   return (
-    <div>
-      <h1>Budget Tracker</h1>
+    <div className="container py-4">
+      <h1 className="mb-4 text-center">💸 Budget Tracker</h1>
+  
       {!user ? (
-        <div id="signInDiv"></div>
+        <div className="d-flex justify-content-center" id="signInDiv"></div>
       ) : (
-        <div>
-          <p>Welcome, {user.name}</p>
-          <form onSubmit={handleSubmit}>
-            <input type="date" name="Date" value={form.Date} onChange={handleChange} required />
-            <input type="text" name="Description" placeholder="Description" value={form.Description} onChange={handleChange} required />
-            <input type="text" name="Category" placeholder="Category" value={form.Category} onChange={handleChange} required />
-            <input type="number" name="Amount" placeholder="Amount" value={form.Amount} onChange={handleChange} required />
-            <select name="Type" value={form.Type} onChange={handleChange}>
-              <option value="Income">Income</option>
-              <option value="Expense">Expense</option>
-            </select>
-            <button type="submit">Add Transaction</button>
-          </form>
-          <h2>Summary</h2>
-          <p>Income: {summary.income}</p>
-          <p>Expenses: {summary.expense}</p>
-          <p>Savings: {summary.savings}</p>
-          <h2>Transactions</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.map((t, i) => (
-                <tr key={i}>
-                  <td>{t.Date}</td>
-                  <td>{t.Description}</td>
-                  <td>{t.Category}</td>
-                  <td>{t.Amount}</td>
-                  <td>{t.Type}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <div className="mb-4 text-end">
+            <strong>Welcome, {user.name}</strong>
+          </div>
+  
+          {/* Form */}
+          <div className="mb-4">
+            <div className="card">
+              <div className="card-header">Add Transaction</div>
+              <div className="card-body">
+                <form onSubmit={handleSubmit} className="row g-3">
+                  <div className="col-md-3">
+                    <input type="date" name="Date" value={form.Date} onChange={handleChange} className="form-control" required />
+                  </div>
+                  <div className="col-md-3">
+                    <input type="text" name="Description" placeholder="Description" value={form.Description} onChange={handleChange} className="form-control" required />
+                  </div>
+                  <div className="col-md-2">
+                    <input type="text" name="Category" placeholder="Category" value={form.Category} onChange={handleChange} className="form-control" required />
+                  </div>
+                  <div className="col-md-2">
+                    <input type="number" name="Amount" placeholder="Amount" value={form.Amount} onChange={handleChange} className="form-control" required />
+                  </div>
+                  <div className="col-md-2 d-flex">
+                    <select name="Type" value={form.Type} onChange={handleChange} className="form-select me-2">
+                      <option value="Income">Income</option>
+                      <option value="Expense">Expense</option>
+                    </select>
+                    <button type="submit" className="btn btn-primary">Add</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+  
+          {/* Summary */}
+          <div className="mb-4 row text-center">
+            <div className="col-md-4">
+              <div className="alert alert-success">
+                <strong>Income:</strong> ${summary.income.toFixed(2)}
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="alert alert-danger">
+                <strong>Expenses:</strong> ${summary.expense.toFixed(2)}
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className={`alert ${summary.savings >= 0 ? 'alert-primary' : 'alert-warning'}`}>
+                <strong>Savings:</strong> ${summary.savings.toFixed(2)}
+              </div>
+            </div>
+          </div>
+  
+          {/* Table */}
+          <div className="card">
+            <div className="card-header">Transactions</div>
+            <div className="card-body table-responsive">
+              <table className="table table-striped table-hover">
+                <thead className="table-light">
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactions.map((t, i) => (
+                    <tr key={i}>
+                      <td>{t.Date}</td>
+                      <td>{t.Description}</td>
+                      <td>{t.Category}</td>
+                      <td>${parseFloat(t.Amount).toFixed(2)}</td>
+                      <td>
+                        <span className={`badge ${t.Type === 'Income' ? 'bg-success' : 'bg-danger'}`}>
+                          {t.Type}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {transactions.length === 0 && <p className="text-muted text-center">No transactions yet.</p>}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
+  
 }
-
 export default App;
