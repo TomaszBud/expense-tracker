@@ -9,10 +9,10 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.5",
+    "lucid": "^0.0.1",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.1.0",
-    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "homepage": "https://TomaszBud.github.io/expense-tracker",
@@ -47,6 +47,8 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.0",
+    "gh-pages": "^6.3.0",
+    "react-scripts": "^5.0.1"
   }
 }
