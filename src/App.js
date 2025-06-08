@@ -25,7 +25,7 @@ const ExpenseTracker = () => {
     type: 'EXPENSE'
   });
 
-  // Enums as you mentioned
+  // eslint-disable-next-line no-unused-vars
   const TRANSACTION_TYPES = {
     INCOME: 'INCOME',
     EXPENSE: 'EXPENSE'
